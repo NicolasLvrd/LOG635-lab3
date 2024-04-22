@@ -84,4 +84,4 @@ def cozmo_program(robot: cozmo.robot.Robot):
 
 
 
-cozmo.run_program(cozmo_program, use_3d_viewer=True)
+#cozmo.run_program(cozmo_program, use_3d_viewer=True)
