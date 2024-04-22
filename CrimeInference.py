@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from aima.logic import *
 import nltk
+import IHM as IHM
 
 class CrimeInference:
 
@@ -130,9 +131,24 @@ class CrimeInference:
         self.crime_kb.tell(expr(clause_string))
 
 
+    # Cette fonction retourne le format d'une expression logique de premier ordre
+    @staticmethod
+    def results_as_string(results):
+        res = ''
+        for result in results:
+            # synrep = syntactic representation
+            # semrep = semantic representation
+            for (synrep, semrep) in result:            
+                res += str(semrep)
+        return res
+
     # NEW
     def add_clause_to_fol(self, clause, grammar_file):
-        self.add_clause(nltk.interpret_sents(clause, grammar_file))
+        sent = self.results_as_string(nltk.interpret_sents(clause, grammar_file))
+
+        IHM.show_thought(sent)
+        
+        self.add_clause(sent)
  
 
     # Demander à la base de connaissances qui est la victime
