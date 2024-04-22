@@ -10,5 +10,5 @@ class Peopletype(Enum):
     Jaune = "jaune"
 
 
-VICTIME = Peopletype.Mauve
+VICTIME = Peopletype.Mauve.value
 killer = Peopletype.Rouge
