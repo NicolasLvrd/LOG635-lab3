@@ -1,18 +1,16 @@
 import cozmo
 
 def ask_text(robot: cozmo.robot.Robot, text: str):
-    tmp = robot.say_text(text)
+    tmp = robot.say_text(text).wait_for_completed()
 
-    output = prompt_text(robot, text)
-
-    tmp.wait_for_completed()
+    output = prompt_text(text)
 
     return output
 
 
-def prompt_text(robot: cozmo.robot.Robot, text: str):
+def prompt_text(text: str):
 
-    output = str(input("[Cozmo] : " + text + "\n>>> "))
+    output = input("[Cozmo] : " + text + "\n>>> ")
 
     print("\n\n")
 
