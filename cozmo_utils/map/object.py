@@ -52,7 +52,7 @@ def init_object_dict(robot) -> dict:
     objects_action[robot.world.get_light_cube(LightCube2Id)] = ((CustomObjectTypes.CustomType05,type_marker_map[CustomObjectTypes.CustomType05],55,25,25), Peopletype.Rouge) # a modifier
     objects_action[CustomObjectTypes.CustomType06] = ((CustomObjectTypes.CustomType06,type_marker_map[CustomObjectTypes.CustomType06],55,25,25), Peopletype.Vert)
     objects_action[CustomObjectTypes.CustomType07] = ((CustomObjectTypes.CustomType07,type_marker_map[CustomObjectTypes.CustomType07],55,25,25), WeaponType.Chandelier) 
-    objects_action[CustomObjectTypes.CustomType08] = ((CustomObjectTypes.CustomType08,type_marker_map[CustomObjectTypes.CustomType08],55,25,25), WeaponType.Cle_anglaise)
+    objects_action[CustomObjectTypes.CustomType08] = ((CustomObjectTypes.CustomType08,type_marker_map[CustomObjectTypes.CustomType08],55,25,25), WeaponType.Vase)
     objects_action[CustomObjectTypes.CustomType09] = ((CustomObjectTypes.CustomType09,type_marker_map[CustomObjectTypes.CustomType09],55,25,25), WeaponType.Corde)
     objects_action[CustomObjectTypes.CustomType10] = ((CustomObjectTypes.CustomType10,type_marker_map[CustomObjectTypes.CustomType10],55,25,25), WeaponType.Matraque)
     objects_action[CustomObjectTypes.CustomType11] = ((CustomObjectTypes.CustomType11,type_marker_map[CustomObjectTypes.CustomType11],55,25,25), WeaponType.Poignard)

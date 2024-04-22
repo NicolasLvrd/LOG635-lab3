@@ -9,7 +9,7 @@ class RoomType(Enum):
     Bureau = ("bureau",(450,200,degrees(90)))
     Salon = ("salon",(150,200,degrees(90)))
     Cuisine = ("cuisine",(150,-200,degrees(-90)))
-    SalleAManger = ("salleamanger",(450,-200,degrees(-90)))
+    Chambre = ("chambre",(450,-200,degrees(-90)))
     Galerie = ("galerie",(700,0,degrees(-90)))
 
 
