@@ -1,11 +1,12 @@
 
 # Solution
 - Pièce du crime : Cuisine
-- Arme du crime : Couteau
-- Personne victime : Noir
+- Arme du crime : Matraque
+- Personne victime : Mauve
 - Heure du crime : 12
 - Meurtrier : Rouge
-- Personnes innocentes : Bleu, Vert, Jaune, Mauve, Noir
+- Personnes innocentes : Bleu, Vert, Jaune, Blanc, Mauve
+
 
 # Faits
 ## État initial
@@ -14,8 +15,8 @@
 - Bleu
 - Vert
 - Jaune
+- Blanc
 - Mauve
-- Noir
 
 ### Pièces
 - Cuisine
@@ -27,56 +28,56 @@
 
 ### Armes
 - Corde
-- Couteau
-- Fusil
-- Marteau
+- Matraque
+- Chandelier
+- Poignard
 - Vase
-- Pistolet
+- Revolver
 
 ### Arme_Marque
 - Corde | Cou
-- Couteau | Incision
-- Fusil | Balle
-- Marteau | Ecchymose
+- Matraque | Ecchymose
+- Chandelier | Contusion
+- Poignard | Incision
 - Vase | Coupure
-- Pistolet | Trou
+- Revolver | Balle
 
 ### EstMort
-- Noir
+- Mauve
 
 ### EstVivant
 - Rouge
 - Bleu
 - Vert
 - Jaune
-- Mauve
+- Blanc
 
 ## Via obervations
 ### Arme_Piece
 - Corde | Hall
-- Couteau | Cuisine
-- Fusil | Galerie
-- Marteau | Bureau
+- Matraque | Cuisine
+- Chandelier | Galerie
+- Poignard | Bureau
 - Vase | Chambre
-- Pistolet | Salon
+- Revolver | Salon
 
 ### Personne_Piece
 - Rouge  | Chambre
 - Bleu | Salon
 - Vert | Bureau
 - Jaune | Galerie
-- Mauve | Hall
-- Noir | Cuisine
+- Blanc | Hall
+- Mauve | Cuisine
 
 ## Via Questions
 ### HeureCrime
 - 12
 
 ### Personne_Marque
-- Noir | Cou
+- Mauve | Cou
 
 ### Menaces
-- Rouge | Noir | 9
+- Rouge | Mauve | 9
 
 ### Declare
 - Vert | Rouge | Cuisine | 11
@@ -85,14 +86,14 @@
 - Rouge | Vert | Hall | 12
 
 ### Personne_Piece_Heure
-- Mauve | Salon | 12
+- Blanc | Salon | 12
 
 # Inférence
-- Victime(Noir)
-- Innocent(Noir; Bleu; Vert; Jaine; Mauve)
+- Victime(Mauve)
+- Innocent(Mauve; Bleu; Vert; Jaine; Blanc)
 - PieceCrime(Cuisine)
 - ArmeCrime(Corde)
 - Mobile(Rouge)
-- Personne_Piece_Heure((Rouge, Cuisine, 11); (Bleu, Salon, 12); (Jaune, Chambre 12); (Mauve, Salon; 12); (Vert, Hall, 12))
-- Alibi(Bleu, Jaune, Mauve, Vert)
+- Personne_Piece_Heure((Rouge, Cuisine, 11); (Bleu, Salon, 12); (Jaune, Chambre 12); (Blanc, Salon; 12); (Vert, Hall, 12))
+- Alibi(Bleu, Jaune, Blanc, Vert)
 - Suspect(Rouge)

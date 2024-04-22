@@ -1,9 +1,8 @@
 %start S
 
-S[SEM=<HeureCrime(?h)>] -> N[SEM=?n] V AD P Nh[SEM=?h]
-N[SEM=?np] -> Npers[SEM=?np]
-V -> 'est'
-AD -> 'mort' | 'morte'
+S[SEM=<Menaces(?p1, ?p2, ?h)>] -> Npers[SEM=?p1] V Vm Npers[SEM=?p2] P Nh[SEM=?h]
+V -> 'a'
+Vm -> 'menacé'
 P -> 'à'
 
 Npers[SEM=<Rouge>] -> 'rouge'
