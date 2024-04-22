@@ -9,3 +9,6 @@ class Peopletype(Enum):
     Blanc = "blanc"  
     Jaune = "jaune"
 
+
+victim = Peopletype.Mauve
+killer = Peopletype.Rouge

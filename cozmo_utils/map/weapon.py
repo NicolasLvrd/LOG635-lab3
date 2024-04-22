@@ -7,3 +7,5 @@ class WeaponType(Enum):
     Corde = "corde"
     Vase = "vase"
     Matraque = "matraque"
+
+killer_weapon = WeaponType.Matraque
