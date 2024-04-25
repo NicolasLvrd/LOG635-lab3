@@ -1,4 +1,5 @@
 import os
+from time import sleep
 os.environ['PYOPENGL_PLATFORM'] = 'glx'
 
 from .map.map import place_walls
@@ -16,7 +17,7 @@ def look_for_information(robot,world_objects):
     obj_list = []
     
     lookaround = robot.start_behavior(cozmo.behavior.BehaviorTypes.LookAroundInPlace)
-    obj_list = robot.world.wait_until_observe_num_objects(num=2, object_type=ObservableObject, timeout=60)
+    obj_list = robot.world.wait_until_observe_num_objects(num=1, object_type=ObservableObject, timeout=60)
     lookaround.stop()
 
 
@@ -38,7 +39,13 @@ def look_for_information(robot,world_objects):
 
 def roll_victim(robot,victim:Object_information):
 
-    robot.roll_cube(victim.obj,num_retries=2).wait_for_completed()
+    robot.go_to_object(victim.obj,cozmo.util.Distance(distance_mm=100)).wait_for_completed()
+
+    e = robot.roll_cube(victim.obj,num_retries=1).wait_for_completed()
+
+    # print(e)
+    
+
 
 
 def answer_by_tap(robot):
@@ -61,10 +68,15 @@ def answer_by_tap(robot):
 def justice(robot):
     lightcube =  robot.world.get_light_cube(LightCube2Id)
     
+    e = robot.go_to_object(lightcube,cozmo.util.Distance(distance_mm=100)).wait_for_completed()
+    print(e)
 
-    robot.PickupObject(lightcube).wait_for_completed()
+    e = robot.pickup_object(lightcube,num_retries= 2).wait_for_completed()
+    print(e)
 
-    robot.GoToPose(Pose(0,0,0,degrees(0))).wait_for_completed()
+    robot.go_to_pose(Pose(0,0,0,angle_z=degrees(0))).wait_for_completed()
+
+    robot.place_object_on_ground_here(lightcube,num_retries=2).wait_for_completed()
 
 
 
@@ -77,10 +89,10 @@ def cozmo_program(robot: cozmo.robot.Robot):
     # # set walls 
     # place_walls(robot)
 
-    f = look_for_information(robot,objects)
+    # f = look_for_information(robot,objects)
 
 
-    roll_victim(robot,f[0])
+    # roll_victim(robot,f[0])
 
 
     justice(robot)
@@ -90,7 +102,5 @@ def cozmo_program(robot: cozmo.robot.Robot):
 
 
 
-
-
-
-#cozmo.run_program(cozmo_program, use_3d_viewer=True)
+if __name__ == "__main__":
+    cozmo.run_program(cozmo_program, use_3d_viewer=True)
