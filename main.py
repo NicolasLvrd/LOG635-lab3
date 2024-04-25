@@ -42,6 +42,7 @@ def main(robot: cozmo.robot.Robot):
     for piece in pieces:
         if str(COUPABLE).upper() == piece.get_personne().upper():
             piece.move_to(robot)
+            cutils.justice(robot)
             # je dois ramener le coupable a la police ?
 
 
@@ -70,7 +71,7 @@ def Analyse_piece(robot: cozmo.robot.Robot, crime_kb: CrimeInference, piece: Pie
         # on apprend que la personne est morte
         expr = crime_kb.add_clause_to_fol([f"{piece.get_personne()} est morte"], 'grammars/personne_morte.fcfg')
         IHM.show_thought(robot, expr)
-        
+
         victime_question(robot, crime_kb, piece)
     
     else:

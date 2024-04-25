@@ -20,8 +20,8 @@ class Piece:
                 self.personne = out.type.value
 
                 if VICTIME == self.personne:
-                    #cutils.roll_victim(robot, out)
-                    pass
+                    cutils.roll_victim(robot, out)
+
             else:
                 self.arme = out.type.value
 
