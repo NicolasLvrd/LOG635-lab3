@@ -2,13 +2,13 @@
 from aima.logic import *
 import nltk
 import IHM as IHM
-
+# Permet d'inferer qui est le meurtrier, quand, comment, où il a tué.
 class CrimeInference:
 
-    def __init__(self, _weapons = ["Corde", "Fusil", "Couteau"], _rooms= ["Cuisine", "Bureau", "Garage", "Salon"], _persons= ["Mustard", "Peacock", "Scarlet", "Plum", "White"]):
-        self.weapons = _weapons
-        self.rooms = _rooms
-        self.persons = _persons
+    def __init__(self):
+        self.weapons = ["Corde", "Revolver", "Matraque", "Poignard", "Vase", "Chandelier"]
+        self.rooms = ["Cuisine", "Bureau", "Salon", "Chambre", "Galerie", "Hall"]
+        self.persons = ["Rouge", "Bleu", "Vert", "Jaune", "Mauve", "Blanc"]
         
         # Liste de clauses (faits) qui seront stockées dans la base de connaissance.
         self.clauses = []        
@@ -114,6 +114,21 @@ class CrimeInference:
         # Si la personne est morte alors elle est innocente et ce n'est pas un suicide
         self.clauses.append(expr('EstMort(x) ==> Innocent(x)'))
 
+        self.clauses.append(expr('Menaces(x,y,h) & EstMort(y) ==> Suspect(x)'))
+
+        self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Cou)  ==> ArmeCrime(Corde)"))
+        self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Balle)  ==> ArmeCrime(Revolver)"))
+        self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Ecchymose)  ==> ArmeCrime(Matraque)"))
+        self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Incision)  ==> ArmeCrime(Poignard)"))
+        self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Coupure)  ==> ArmeCrime(Vase)"))
+        self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Contusion)  ==> ArmeCrime(Chandelier)"))
+
+        self.clauses.append(expr(
+            'EstVivant(p) & HeureCrime(h) & Personne_Piece_Heure(p,r2,h) & PieceCrime(r1)'
+            ' & PieceDifferente(r1,r2) ==> Innocent(p)'))
+
+
+
         # Si la personne est vivante et était dans une pièce
         # qui ne contient pas l'arme du crime, alors elle est innocente
         self.clauses.append(expr(
@@ -129,27 +144,6 @@ class CrimeInference:
     # Ajouter des clauses, c'est-à-dire des faits, à la base de connaissances
     def add_clause(self, clause_string):
         self.crime_kb.tell(expr(clause_string))
-
-
-    # Cette fonction retourne le format d'une expression logique de premier ordre
-    @staticmethod
-    def results_as_string(results):
-        res = ''
-        for result in results:
-            # synrep = syntactic representation
-            # semrep = semantic representation
-            for (synrep, semrep) in result:            
-                res += str(semrep)
-        return res
-
-    # NEW
-    def add_clause_to_fol(self, clause, grammar_file):
-        sent = self.results_as_string(nltk.interpret_sents(clause, grammar_file))
-
-        IHM.show_thought(sent)
-        
-        self.add_clause(sent)
- 
 
     # Demander à la base de connaissances qui est la victime
     def get_victim(self):
@@ -207,13 +201,22 @@ class CrimeInference:
             if not res.__contains__(elt[x]):
                 res.append(elt[x])
         return res
-    
 
-    # new
-    def get_personne_piece(self, personne):
-        result = self.crime_kb.ask(expr('Personne_Piece({}, y)'.format(personne)))
-    
-        if not result:
-            return result
-        else:
-            return result[x]
+    # Cette fonction retourne le format d'une expression logique de premier ordre
+    @staticmethod
+    def results_as_string(results):
+        res = ''
+        for result in results:
+            # synrep = syntactic representation
+            # semrep = semantic representation
+            for (synrep, semrep) in result:            
+                res += str(semrep)
+        return res
+
+    # NEW
+    def add_clause_to_fol(self, clause, grammar_file):
+        sent = self.results_as_string(nltk.interpret_sents(clause, grammar_file))
+
+        self.add_clause(sent)
+        return sent
+ 
