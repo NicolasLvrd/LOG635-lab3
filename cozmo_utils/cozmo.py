@@ -6,8 +6,8 @@ from .map.object import update_world_objects, init_object_dict, get_object_type,
 from .map.room import RoomType
 
 import cozmo
-from cozmo.objects import ObservableObject, LightCube, EvtObjectTapped, CustomObject
-from cozmo.util import Pose
+from cozmo.objects import ObservableObject, LightCube, EvtObjectTapped, CustomObject, LightCube2Id
+from cozmo.util import Pose, degrees
 
 def look_for_information(robot,world_objects):
     
@@ -59,6 +59,13 @@ def answer_by_tap(robot):
 
     return cpt == 1 
 
+def justice(robot):
+    lightcube =  robot.world.get_light_cube(LightCube2Id)
+    
+
+    robot.PickupObject(lightcube).wait_for_completed()
+
+    robot.GoToPose(Pose(0,0,0,degrees(0))).wait_for_completed()
 
 
 
