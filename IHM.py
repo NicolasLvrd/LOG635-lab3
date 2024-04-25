@@ -17,7 +17,7 @@ def prompt_text(text: str):
     if "VOICE" in output:
         voice_to_text.enregistrer_audio("enregistrement.wav", 5)
         output = voice_to_text.speech_recognition("enregistrement.wav")
-        print(output)
+        # print(output)
     
     print("\n\n")
 

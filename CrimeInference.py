@@ -55,9 +55,13 @@ class CrimeInference:
         # p. ex.: Mustard est la victime
         self.victim_clause = 'Victime({})'
 
-        # paramètre 1 : personne
+        # paramètre 1 : personne | marque
         # p. ex.: Mustard a des marques au cou
-        self.body_mark_clause = 'MarqueCou({})'
+        self.person_body_mark_clause = 'Personne_Marque({},{})'
+
+        # paramètre 1 : arme | marque
+        # p. ex.: La corde provoque des marques au cou
+        self.weapon_body_mark_clause = 'Arme_Marque({},{})'
 
         # paramètre 1 : piece; paramètre 2 : piece
         self.room_different_clause = 'PieceDifferente({},{})'
@@ -68,8 +72,24 @@ class CrimeInference:
         # paramètre 1 : heure
         self.crime_hour_clause = 'HeureCrime({})'
 
-        # paramètre 1 : heure
-        self.crime_hour_plus_one_clause = 'UneHeureApresCrime({})'
+        # paramètre 1 : personne; paramètre 2 : personne; paramètre 3 : heure
+        self.threat_clause = 'Menaces({}, {}, {})'
+
+        # paramètre 1 : personne
+        self.motive_clause = 'Mobile({})'
+
+        # paramètre 1 : personne
+        self.alibi_clause = 'Alibi({})'
+
+        # paramètre 1 : personne, paramètre 2 : personne, paramètre 3 : piece, paramètre 4 : heure
+        self.declare_clause = 'Declare({}, {}, {}, {})'
+
+        # paramètre 1 : heure, paramètre 2 : heure
+        self.hour_before = "HeureAvant({},{})"
+
+        # Initialiser la base de connaissances
+        self.egalite_clause = 'Egal({},{})'
+
 
     def initialize_KB(self):
         # Clause pour differencier les pièces
@@ -98,6 +118,18 @@ class CrimeInference:
         for person in self.persons:
             # Mustar est une personne = Personne(Mustard)
             self.clauses.append(expr(self.personne_clause.format(person)))
+
+
+        # Initialiser KB sur les heures avant
+        for hour_deb in range(0, 24):
+            for hour_fin in range(hour_deb, 24):
+                self.clauses.append(expr(self.hour_before.format(hour_deb, hour_fin)))
+
+            # heure identique
+            self.clauses.append(expr(self.egalite_clause.format(hour_deb, hour_deb)))
+            
+
+
     
     # Expressions dans la logique du premier ordre permettant de déduire les caractéristiques du meurtre
     def inference_rules(self):
@@ -106,16 +138,7 @@ class CrimeInference:
 
         # Determiner l'arme du crime
         self.clauses.append(expr('PieceCrime(x) & Arme(y) & Piece_Arme(y, x) ==> ArmeCrime(y)'))
-        self.clauses.append(expr("EstMort(x) & MarqueCou(x) ==> ArmeCrime(Corde)"))
-
-        # Si la personne est morte alors elle est la victime et ce n'est pas un suicide
-        self.clauses.append(expr('EstMort(x) ==> Victime(x)'))
-
-        # Si la personne est morte alors elle est innocente et ce n'est pas un suicide
-        self.clauses.append(expr('EstMort(x) ==> Innocent(x)'))
-
-        self.clauses.append(expr('Menaces(x,y,h) & EstMort(y) ==> Suspect(x)'))
-
+        # self.clauses.append(expr("EstMort(x) & Personne_Marque(x, y) & Arme_Marque (z, y) ==> ArmeCrime(z)"))
         self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Cou)  ==> ArmeCrime(Corde)"))
         self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Balle)  ==> ArmeCrime(Revolver)"))
         self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Ecchymose)  ==> ArmeCrime(Matraque)"))
@@ -123,23 +146,33 @@ class CrimeInference:
         self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Coupure)  ==> ArmeCrime(Vase)"))
         self.clauses.append(expr("EstMort(x) & Personne_Marque(x,Contusion)  ==> ArmeCrime(Chandelier)"))
 
-        self.clauses.append(expr(
-            'EstVivant(p) & HeureCrime(h) & Personne_Piece_Heure(p,r2,h) & PieceCrime(r1)'
-            ' & PieceDifferente(r1,r2) ==> Innocent(p)'))
+        # Si la personne est morte alors elle est la victime et ce n'est pas un suicide
+        self.clauses.append(expr('EstMort(x) ==> Victime(x)'))
 
-
+        # Si la personne est morte alors elle est innocente et ce n'est pas un suicide
+        self.clauses.append(expr('EstMort(x) ==> Innocent(x)'))
 
         # Si la personne est vivante et était dans une pièce
         # qui ne contient pas l'arme du crime, alors elle est innocente
-        self.clauses.append(expr(
-            'EstVivant(p) & UneHeureApresCrime(h1) & Personne_Piece_Heure(p,r2,h1) & PieceCrime(r1)'
-            ' & PieceDifferente(r1,r2) & ArmeCrime(a1) & Arme_Piece(a2,r2) & ArmeDifferente(a1,a2) ==> Innocent(p)'))
+        self.clauses.append(expr('EstVivant(p) & Alibi(p) & Personne_Piece_Heure(p,r2,h1) & PieceCrime(r1) & PieceDifferente(r1,r2) & ArmeCrime(a1) & Arme_Piece(a2,r2) & ArmeDifferente(a1,a2) ==> Innocent(p)'))
 
         # Si la personne se trouvait dans une piece qui contient l'arme
         # qui a tué la victime une heure après le meurtre alors elle est suspecte
-        self.clauses.append(expr(
-            'EstVivant(p) & UneHeureApresCrime(h1) & Personne_Piece_Heure(p,r2,h1) & PieceCrime(r1)'
-            ' & PieceDifferente(r1,r2) & ArmeCrime(a) & Arme_Piece(a,r2) ==> Suspect(p)'))
+        self.clauses.append(expr('EstVivant(p) & Mobile(p) & Personne_Piece_Heure(p,r2,h1) & PieceCrime(r1) &  PieceDifferente(r1,r2) & ArmeCrime(a) & Arme_Piece(a,r2) ==> Suspect(p)'))
+        
+        # Si la personne se trouvait dans une piece qui contient l'arme du crime avant l'heure du crime et a un mobile alors est suspect
+        self.clauses.append(expr('EstVivant(p) & Mobile(p) & Personne_Piece_Heure(p,r2,h1) & ArmeCrime(a) & Arme_Piece(a,r2) & HeureCrime(hc) & HeureAvant(h,hc) ==> Suspect(p)'))
+
+        # Si une personne a été entendue proférer des menaces contre la victime dans l'heure qui précède le crime, alors elle a un mobile
+        self.clauses.append(expr("Menaces(p, v, h) & EstMort(v) & HeureCrime(hc) & HeureAvant(h,hc) ==> Mobile(p)"))
+
+        # Si une personne a été vue dans une pièce differente de celle du crime à l'heure du crime, alors elle a un alibi
+        self.clauses.append(expr('EstVivant(p) & Personne_Piece_Heure(p,r1,h) & PieceCrime(r2) & PieceDifferente(r1,r2) & HeureCrime(hc) & Egal(hc,h) ==> Alibi(p)'))
+
+
+
+        # Si une personne affirme qu'elle a vu une personne dans une pièce à une heure donnée, alors cette personne était dans cette pièce à cette heure
+        self.clauses.append(expr('Declare(p1, p2, r, h) ==> Personne_Piece_Heure(p2, r, h)'))
 
     # Ajouter des clauses, c'est-à-dire des faits, à la base de connaissances
     def add_clause(self, clause_string):
@@ -195,6 +228,24 @@ class CrimeInference:
     # Demander à la base de connaissances la liste d'innocents
     def get_innocent(self):
         result = list(fol_bc_ask(self.crime_kb, expr('Innocent(x)')))
+        res = []
+
+        for elt in result:
+            if not res.__contains__(elt[x]):
+                res.append(elt[x])
+        return res
+    
+    def get_mobile(self):
+        result = list(fol_bc_ask(self.crime_kb, expr('Mobile(x)')))
+        res = []
+
+        for elt in result:
+            if not res.__contains__(elt[x]):
+                res.append(elt[x])
+        return res
+    
+    def get_menaces(self):
+        result = list(fol_bc_ask(self.crime_kb, expr('Menaces(x, y, z)')))
         res = []
 
         for elt in result:
