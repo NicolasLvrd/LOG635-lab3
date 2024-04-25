@@ -48,14 +48,13 @@ def answer_by_tap(robot):
     while (not time_out) :
         try: 
             tap = robot.wait_for(EvtObjectTapped,timeout=3)
-            print(tap)
+            # print(tap
         except Exception as e:
             time_out = True
             break
 
         cpt += tap.tap_count
 
-    print(cpt)
 
     return cpt == 1 
 
@@ -82,6 +81,9 @@ def cozmo_program(robot: cozmo.robot.Robot):
 
 
     roll_victim(robot,f[0])
+
+
+    justice(robot)
 
     # print(answer_by_tap(robot))
 
