@@ -17,7 +17,7 @@ def look_for_information(robot,world_objects):
     obj_list = []
     
     lookaround = robot.start_behavior(cozmo.behavior.BehaviorTypes.LookAroundInPlace)
-    obj_list = robot.world.wait_until_observe_num_objects(num=1, object_type=ObservableObject, timeout=60)
+    obj_list = robot.world.wait_until_observe_num_objects(num=2, object_type=ObservableObject, timeout=60)
     lookaround.stop()
 
 
