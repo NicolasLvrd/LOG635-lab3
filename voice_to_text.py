@@ -17,8 +17,8 @@ def speech_recognition(nom_fichier):
     try: 
         print("\t\033[3;33m#tts : Reconnaissance vocale en cours...\033[0m")
         model = whisper.load_model("base")
-        result = model.transcribe(nom_fichier, language="french")
-        # print("\t\033[3;33m#tty : Retranscription : ", result["text"])
+        result = model.transcribe(nom_fichier, language="french",  fp16=False)
+        print("\t\033[3;33m#tty : Retranscription : ", result["text"])
         return result["text"]
     
     except Exception as e:
