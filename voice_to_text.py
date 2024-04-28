@@ -29,6 +29,9 @@ def speech_recognition(nom_fichier):
         
         if "Move" in texte:
             texte = texte.replace("Move", "mauve")
+
+        if "12 h" in texte:
+            texte = texte.replace("12 h", "12h")
         
         print(f"\t\033[3;33m#tts : Texte reconnu : '{texte}'\033[0m")
         return texte
