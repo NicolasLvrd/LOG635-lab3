@@ -27,6 +27,10 @@ def main(robot: cozmo.robot.Robot):
 
         Analyse_piece(robot, crime_kb, piece, world_objs)
     
+    menace = IHM.ask_text(robot, "Est-ce que quelqu'un a proféré des menaces ?")
+    expr = crime_kb.add_clause_to_fol([menace], './grammars/menaces.fcfg')
+    IHM.show_thought(robot, expr)
+    
     # Conclusions
     COUPABLE = crime_kb.get_suspect()
 
